@@ -2,15 +2,16 @@ package com.codeup.jpacrudexamples.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Table(name = "tags")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) // to allow a single entity to be returned in the JSON
 public class Tag {
+
+    // =========== PROPERTIES
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,12 +23,16 @@ public class Tag {
     @JsonBackReference
     private List<Ad> ads;
 
+    // =========== CONSTRUCTORS
+
     public Tag() {
     }
 
     public Tag(String name) {
         this.name = name;
     }
+
+    // =========== GETTERS AND SETTERS
 
     public long getId() {
         return id;

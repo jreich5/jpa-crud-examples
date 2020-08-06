@@ -36,7 +36,7 @@ public class Ad {
     @ManyToMany(cascade = {
             CascadeType.PERSIST,
             CascadeType.MERGE
-    })
+    }) // all is not used to prevent deletion of tags when deleting an ad
     @JoinTable(
             name = "ad_tag",
             joinColumns = @JoinColumn(name = "ad_id"),

@@ -8,6 +8,8 @@ import javax.persistence.*;
 @Table(name = "comments")
 public class Comment {
 
+    // =========== PROPERTIES
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -17,6 +19,8 @@ public class Comment {
     @ManyToOne
     @JsonBackReference
     private Ad ad;
+
+    // =========== CONSTRUCTORS
 
     public Comment() {
     }
@@ -29,6 +33,8 @@ public class Comment {
         this.content = content;
         this.ad = ad;
     }
+
+    // =========== GETTERS AND SETTERS
 
     public long getId() {
         return id;

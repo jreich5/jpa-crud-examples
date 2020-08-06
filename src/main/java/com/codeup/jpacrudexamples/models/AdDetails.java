@@ -8,8 +8,10 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "adDetails")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) // to allow a single entity to be returned in the JSON
 public class AdDetails {
+
+    // =========== PROPERTIES
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,12 +23,16 @@ public class AdDetails {
     @JsonBackReference
     private Ad ad;
 
+    // =========== CONSTRUCTORS
+
     public AdDetails() {
     }
 
     public AdDetails(String extraInfo) {
         this.extraInfo = extraInfo;
     }
+
+    // =========== GETTERS AND SETTERS
 
     public long getId() {
         return id;
