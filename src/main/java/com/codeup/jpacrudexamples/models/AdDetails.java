@@ -1,11 +1,14 @@
 package com.codeup.jpacrudexamples.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "adDetails")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class AdDetails {
 
     @Id
@@ -15,10 +18,14 @@ public class AdDetails {
     private String extraInfo;
 
     @OneToOne(mappedBy = "adDetails")
-    @JsonManagedReference
+    @JsonBackReference
     private Ad ad;
 
     public AdDetails() {
+    }
+
+    public AdDetails(String extraInfo) {
+        this.extraInfo = extraInfo;
     }
 
     public long getId() {

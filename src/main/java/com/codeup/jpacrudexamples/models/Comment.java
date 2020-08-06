@@ -21,6 +21,10 @@ public class Comment {
     public Comment() {
     }
 
+    public Comment(String content) {
+        this.content = content;
+    }
+
     public Comment(String content, Ad ad) {
         this.content = content;
         this.ad = ad;

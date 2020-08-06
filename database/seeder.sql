@@ -1,4 +1,4 @@
-use ganymede_spring_db;
+use jpa_examples_db;
 
 insert into ad_details (extra_info) values ('more info about Solarbreeze');
 insert into ad_details (extra_info) values ('more info about Biodex');

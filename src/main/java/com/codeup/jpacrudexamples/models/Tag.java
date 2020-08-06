@@ -1,12 +1,15 @@
 package com.codeup.jpacrudexamples.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Table(name = "tags")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Tag {
 
     @Id
@@ -15,16 +18,15 @@ public class Tag {
 
     private String name;
 
-
-    @ManyToMany
-    @JoinTable(
-        name = "ad_tag",
-        joinColumns = @JoinColumn(name = "tag_id"),
-        inverseJoinColumns = @JoinColumn(name = "ad_id"))
+    @ManyToMany(mappedBy = "tags")
     @JsonBackReference
     private List<Ad> ads;
 
     public Tag() {
+    }
+
+    public Tag(String name) {
+        this.name = name;
     }
 
     public long getId() {
@@ -50,4 +52,6 @@ public class Tag {
     public void setAds(List<Ad> ads) {
         this.ads = ads;
     }
+
+
 }

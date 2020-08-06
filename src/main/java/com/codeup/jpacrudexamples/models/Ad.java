@@ -1,14 +1,21 @@
 package com.codeup.jpacrudexamples.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "ads")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) // to allow a single entity to be returned in the JSON
 public class Ad {
+
+    // =========== PROPERTIES
+
+    // properties that will become columns in the table
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,33 +27,56 @@ public class Ad {
     @Column(columnDefinition = "TEXT NOT NULL")
     private String description;
 
+    // relationship properties
+
     @OneToMany(mappedBy = "ad", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Comment> comments;
 
-    @ManyToMany(mappedBy = "ads")
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
+    @JoinTable(
+            name = "ad_tag",
+            joinColumns = @JoinColumn(name = "ad_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
     @JsonManagedReference
-    private List<Tag> tags;
+    private List<Tag> tags = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "ad_details_id", referencedColumnName = "id")
-    @JsonBackReference
+    @JsonManagedReference
     private AdDetails adDetails;
 
+    // =========== CONSTRUCTORS
+
     public Ad() {
+    }
+
+    public Ad(String title, String description) {
+        this.title = title;
+        this.description = description;
     }
 
     public Ad(String title) {
         this.title = title;
     }
 
-    public List<Comment> getComments() {
-        return comments;
+    // =========== HELPER METHODS
+
+    public void addTag(Tag tag) {
+        tags.add(tag); // add tag to list of tags for this ad
+        tag.getAds().add(this); // add this ad to this tag
     }
 
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
+    public void removeTag(Tag tag) {
+        tags.remove(tag); // remove tag from list of tags for this ad
+        tag.getAds().remove(this); // remove this ad from the tag list of ads
     }
+
+
+    // =========== GETTERS AND SETTERS
 
     public long getId() {
         return id;
@@ -88,12 +118,12 @@ public class Ad {
         this.adDetails = adDetails;
     }
 
-    @Override
-    public String toString() {
-        return "Ad{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                '}';
+    public List<Comment> getComments() {
+        return comments;
     }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
 }
